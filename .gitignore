@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Logs
+*.log
+
+# JSON runtime files
+*.json
+
+# Sandbox contents (but keep marker)
+sandbox/*
+!sandbox/.SANDBOX_MARKER
+
+# Backup contents
+sandbox_backup/*
+
+# OS files
+.DS_Store
+
+# IDE files
+.idea/
+.vscode/
