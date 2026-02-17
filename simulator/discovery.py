@@ -15,7 +15,8 @@ def list_target_files():
     target_files = []
     for i in config.ALLOWED_EXT:
         for j in (cwd.parent / config.SANDBOX_DIR).glob(f"*{i}"):
-            target_files.append(str(Path(j)))
+            if j.stat().st_size <= config.MAX_FILE_MB * 1024 * 1024:
+                target_files.append(str(Path(j)))
     return target_files
 
 if __name__ == "__main__":
