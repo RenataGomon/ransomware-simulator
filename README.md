@@ -1,17 +1,16 @@
-#Ransomware Simulator (Educational Project)
+# Ransomware Simulator (Educational Project)
 
 Educational ransomware simulation written in Python.
 This project demonstrates how ransomware-like behavior works in a safe sandbox environment, without encrypting or damaging real user data.
 
-#Important
+# Important
 This is a safe educational simulation.
 No real encryption is performed.
 Original files are NOT modified.
 The program operates only inside the sandbox/ directory.
 A safety marker (.SANDBOX_MARKER) is required.
 
-**How to Run**
-
+# How to Run
 Make sure you are in the project root folder.
 Run simulation
 python main.py simulate
@@ -24,8 +23,7 @@ Restore simulation results
 python main.py restore
 Removes .locked files and ransom note.
 
-**Defense Commands**
-
+# Defense Commands
 Create backup
 python main.py backup
 Copies allowed files to sandbox_backup/.
