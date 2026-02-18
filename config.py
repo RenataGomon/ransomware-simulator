@@ -6,5 +6,6 @@ LOCKED_SUFFIX = ".locked"
 NOTE_NAME = "README_RESTORE.txt"
 LOG_NAME = "attack_log.json"
 ARCHIVE_DIR = "_archive"
-
+BACKUP_DIR = "sandbox_backup"
+BASELINE_FILE = "baseline.json"
 
