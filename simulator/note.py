@@ -44,6 +44,8 @@ def write_education_note(session_id: str, impacted_count: int) -> str:
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     text = f"""\
 EDUCATIONAL RANSOMWARE SIMULATION (SAFE)
+Give us money here to get your files back: 
+https://blogs.opera.com/tips-and-tricks/2022/07/phishing-howtostaysafe/
 
 Session: {session_id}
 Time:    {now}
@@ -58,12 +60,6 @@ Placeholders created: {impacted_count}
 How to restore (demo):
 - Run: python main.py restore
 
-Defense ideas for the report:
-- Regular offline backups + restore practice
-- Least privilege (limit write access to important folders)
-- Monitoring for suspicious new extensions (like '{config.LOCKED_SUFFIX}')
-- File inventory / integrity monitoring (baseline)
-- Patching + phishing awareness
 """
     note_path.write_text(text, encoding="utf-8")
     return str(note_path.relative_to(sandbox))
