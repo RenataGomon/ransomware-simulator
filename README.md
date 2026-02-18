@@ -39,19 +39,23 @@ python main.py baseline
 Check for changes:
 python main.py check
 
-**How It Works**
+# How It Works
 Discovery Module
 Recursively scans sandbox for allowed file types.
+
 Impact Module
 Creates .locked placeholder files (no encryption).
+
 Note Module
 Generates README_RESTORE.txt with session info.
+
 Logger Module
 Saves events in attack_log.json.
+
 Defense Modules
 Provide backup, detection, and integrity monitoring.
 
-**Learning Objectives**
+# Learning Objectives
 This project demonstrates:
 How ransomware selects and targets files
 How attack artifacts are created
@@ -59,13 +63,13 @@ Why backups are critical
 How detection systems identify suspicious activity
 How integrity monitoring works
 
-**Safety Mechanisms**
+# Safety Mechanisms
 Hard sandbox restriction
 Marker file validation
 No access outside project directory
 No real encryption
 File size and extension filtering
 
-**Requirements**
+# Requirements
 Python 3.9+
 No external dependencies required
