@@ -11,7 +11,7 @@ def detect_ransomware():
         i += 1
     if i > 0:
         print("Warning: Possible ransomware activity detected")
-        print(f"\n{i} suspicious files found")
+        print(f"{i} suspicious files found")
     else:
         print("Your PC is safe")
 

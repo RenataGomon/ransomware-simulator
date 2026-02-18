@@ -14,8 +14,8 @@ def ensure_sandbox_safe():
 def list_target_files():
     target_files = []
     for i in config.ALLOWED_EXT:
-        for j in (cwd.parent / config.SANDBOX_DIR).glob(f"*{i}"):
-            if j.stat().st_size <= config.MAX_FILE_MB * 1024 * 1024:
+        for j in (cwd.parent / config.SANDBOX_DIR).rglob(f"*{i}"):
+            if j.stat().st_size <= config.MAX_FILE_MB * 1024 * 1024 and j.name != "README_RESTORE.txt":
                 target_files.append(str(Path(j)))
     return target_files
 
