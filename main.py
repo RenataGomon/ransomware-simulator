@@ -6,10 +6,8 @@ from pathlib import Path
 project_root = Path(__file__).resolve().parent
 sys.path.insert(0, str(project_root))
 
-# Імпортуємо конфіг
 import config
 
-# ПРАВИЛЬНІ ІМПОРТИ (вказуємо папку через крапку)
 from simulator import discovery
 from simulator import impact_copy
 from simulator import note
@@ -46,7 +44,7 @@ def main():
 
     command = sys.argv[1]
 
-    # 1. Перевірка безпеки (Валентин)
+    # 1. Перевірка безпеки
     if not discovery.ensure_sandbox_safe():
         print("❌ SAFETY ERROR: Sandbox folder or .SANDBOX_MARKER not found!")
         return
@@ -54,18 +52,14 @@ def main():
     if command == "simulate":
         targets = discovery.list_target_files()
 
-        # Отримуємо чистий шлях до sandbox
         sandbox_path = (discovery.cwd.parent / config.SANDBOX_DIR).resolve()
 
         rel_targets = []
         for t in targets:
             try:
-                # Перетворюємо абсолютний шлях у відносний (наприклад, "docs/test.txt")
-                # Це критично важливо для Ренати (impact_copy)
                 rel_path = Path(t).relative_to(sandbox_path)
                 rel_targets.append(str(rel_path))
             except ValueError:
-                # Якщо файл чомусь опинився поза sandbox, ігноруємо
                 continue
 
         if not rel_targets:
@@ -73,11 +67,8 @@ def main():
             return
 
         session_id = str(uuid.uuid4())[:8]
-        # Рената створює копії
         created = impact_copy.create_locked_placeholders(rel_targets, session_id)
-        # Рената пише записку
         note.write_education_note(session_id, len(created))
-        # Марія логує
         logger.log_event("simulate", {"sid": session_id, "impacted": len(created)})
         print(f"🔥 Attack Simulation Complete. {len(created)} placeholder files created.")
 
@@ -98,18 +89,14 @@ def main():
 
         session_id = str(uuid.uuid4())[:8]
 
-        # Створюємо блокировку (Рената)
         created = impact_copy.create_locked_placeholders(rel_targets, session_id)
 
-        # Створюємо записку (Рената)
         note.write_education_note(session_id, len(created))
 
-        # Логуємо подію (Марія)
         logger.log_event("simulate", {"sid": session_id, "impacted": len(created)})
         print(f"🔥 Attack Simulation Complete. {len(created)} placeholder files created.")
 
     elif command == "restore":
-        # Видаляємо сліди (Марія)
         result = restore.restore_system()
         logger.log_event("restore", result)
         print(f"🛠️ Cleanup complete. Removed {result['removed_count']} .locked files.")
@@ -118,25 +105,20 @@ def main():
         detector.detect_ransomware()  # (Валентин)
 
     elif command == "backup":
-        # (Рената)
         files = backup.backup_files()
         print(f"✅ Backup successful. {len(files)} files secured.")
 
     elif command == "recover":
-        # (Рената)
         r, s = backup.restore_from_backup(overwrite=True)
         print(f"✅ Recovery complete. Restored: {r}, Skipped: {s}")
 
     elif command == "detect":
-        # (Валентин)
         detector.detect_ransomware()
 
     elif command == "baseline":
-        # (Марія)
         integrity.create_baseline()
 
     elif command == "check":
-        # (Марія)
         integrity.detect_changes()
 
     else:
