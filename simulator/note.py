@@ -11,7 +11,6 @@ class SandboxSafetyError(RuntimeError):
 
 
 def _sandbox_path() -> Path:
-    # project root = parent of simulator folder
     project_root = Path(__file__).resolve().parent.parent
     return project_root / config.SANDBOX_DIR
 
@@ -36,10 +35,6 @@ def _ensure_sandbox_safe() -> Path:
 
 
 def write_education_note(session_id: str, impacted_count: int) -> str:
-    """
-    Creates/overwrites NOTE_NAME inside sandbox.
-    Returns note path relative to sandbox.
-    """
     sandbox = _ensure_sandbox_safe()
     note_path = sandbox / config.NOTE_NAME
 

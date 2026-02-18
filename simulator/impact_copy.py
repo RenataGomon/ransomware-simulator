@@ -12,7 +12,6 @@ class SandboxSafetyError(RuntimeError):
 
 
 def _sandbox_path() -> Path:
-    # project root = parent of simulator folder
     project_root = Path(__file__).resolve().parent.parent
     return project_root / config.SANDBOX_DIR
 
@@ -31,7 +30,6 @@ def _ensure_sandbox_safe() -> Path:
             f"Create an empty file: {sandbox / config.MARKER_NAME}"
         )
 
-    # Extra guardrails
     if sandbox == Path("/"):
         raise SandboxSafetyError("Refusing to operate on filesystem root '/'.")
 
@@ -67,13 +65,11 @@ def create_locked_placeholders(
     for rel in targets:
         rel_path = Path(rel)
 
-        # Hard safety: only allow relative paths, no traversal
         if rel_path.is_absolute() or ".." in rel_path.parts:
             continue
 
         src = (sandbox / rel_path).resolve()
 
-        # Ensure src is inside sandbox
         try:
             src.relative_to(sandbox)
         except ValueError:
@@ -82,7 +78,6 @@ def create_locked_placeholders(
         if not src.exists() or not src.is_file():
             continue
 
-        # Skip artifacts
         if src.name.endswith(config.LOCKED_SUFFIX):
             continue
         if src.name in {config.NOTE_NAME, config.LOG_NAME, config.MARKER_NAME}:
@@ -90,7 +85,6 @@ def create_locked_placeholders(
 
         locked_path = Path(str(src) + config.LOCKED_SUFFIX)
 
-        # Idempotent: don't overwrite existing placeholder
         if locked_path.exists():
             continue
 
@@ -101,15 +95,14 @@ def create_locked_placeholders(
             + f"To restore: run `python main.py restore`.\n"
         )
 
-        # Keep placeholder tiny & safe
         locked_path.write_text(body[:2000], encoding="utf-8")
         created.append(str(locked_path.relative_to(sandbox)))
 
     return created
 
 
-if __name__ == "__main__":
-    created = create_locked_placeholders(["docs/a.txt",
-                                          "images/keyboard_test.png"],
-                                         session_id="TEST")
-    print("Created:", created)
+# if __name__ == "__main__":
+#     created = create_locked_placeholders(["docs/a.txt",
+#                                           "images/keyboard_test.png"],
+#                                          session_id="TEST")
+#     print("Created:", created)
