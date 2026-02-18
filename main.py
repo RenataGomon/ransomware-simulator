@@ -2,7 +2,6 @@ import sys
 import uuid
 from pathlib import Path
 
-# Додаємо шлях, щоб Python бачив усі папки
 project_root = Path(__file__).resolve().parent
 sys.path.insert(0, str(project_root))
 
@@ -44,9 +43,8 @@ def main():
 
     command = sys.argv[1]
 
-    # 1. Перевірка безпеки
     if not discovery.ensure_sandbox_safe():
-        print("❌ SAFETY ERROR: Sandbox folder or .SANDBOX_MARKER not found!")
+        print("SAFETY ERROR: Sandbox folder or .SANDBOX_MARKER not found!")
         return
 
     if command == "simulate":
@@ -63,54 +61,34 @@ def main():
                 continue
 
         if not rel_targets:
-            print(f"⚠️ No target files found in {sandbox_path}. Check your folders!")
+            print(f"No target files found in {sandbox_path}. Check your folders!")
             return
 
         session_id = str(uuid.uuid4())[:8]
         created = impact_copy.create_locked_placeholders(rel_targets, session_id)
         note.write_education_note(session_id, len(created))
         logger.log_event("simulate", {"sid": session_id, "impacted": len(created)})
-        print(f"🔥 Attack Simulation Complete. {len(created)} placeholder files created.")
+        print(f"Attack Simulation Complete. {len(created)} placeholder files created.")
 
         if not rel_targets:
             print("No target files found to 'encrypt'.")
             return
-
-        session_id = str(uuid.uuid4())[:8]
-        created = impact_copy.create_locked_placeholders(rel_targets, session_id)
-        note.write_education_note(session_id, len(created))
-
-        logger.log_event("simulate", {"sid": session_id, "impacted": len(created)})
-        print(f"🔥 Attack Simulation Complete. {len(created)} placeholder files created.")
-
-        if not rel_targets:
-            print("No target files found to 'encrypt'.")
-            return
-
-        session_id = str(uuid.uuid4())[:8]
-
-        created = impact_copy.create_locked_placeholders(rel_targets, session_id)
-
-        note.write_education_note(session_id, len(created))
-
-        logger.log_event("simulate", {"sid": session_id, "impacted": len(created)})
-        print(f"🔥 Attack Simulation Complete. {len(created)} placeholder files created.")
 
     elif command == "restore":
         result = restore.restore_system()
         logger.log_event("restore", result)
-        print(f"🛠️ Cleanup complete. Removed {result['removed_count']} .locked files.")
+        print(f"Cleanup complete. Removed {result['removed_count']} .locked files.")
 
     elif command == "status":
-        detector.detect_ransomware()  # (Валентин)
+        detector.detect_ransomware()
 
     elif command == "backup":
         files = backup.backup_files()
-        print(f"✅ Backup successful. {len(files)} files secured.")
+        print(f"Backup successful. {len(files)} files secured.")
 
     elif command == "recover":
         r, s = backup.restore_from_backup(overwrite=True)
-        print(f"✅ Recovery complete. Restored: {r}, Skipped: {s}")
+        print(f"Recovery complete. Restored: {r}, Skipped: {s}")
 
     elif command == "detect":
         detector.detect_ransomware()

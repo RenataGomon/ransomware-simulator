@@ -1,6 +1,9 @@
 from __future__ import annotations
 
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 from typing import Iterable, List
 import time
 
@@ -101,8 +104,8 @@ def create_locked_placeholders(
     return created
 
 
-# if __name__ == "__main__":
-#     created = create_locked_placeholders(["docs/a.txt",
-#                                           "images/keyboard_test.png"],
-#                                          session_id="TEST")
-#     print("Created:", created)
+if __name__ == "__main__":
+    created = create_locked_placeholders(["docs/a.txt",
+                                          "images/keyboard_test.png"],
+                                         session_id="TEST")
+    print("Created:", created)

@@ -1,11 +1,13 @@
 import json
 import datetime
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import config
 
 
 def log_event(event_name: str, payload: dict):
-    # Визначаємо корінь: папка simulator -> корінь проєкту
     project_root = Path(__file__).resolve().parent.parent
     log_path = project_root / config.SANDBOX_DIR / config.LOG_NAME
 

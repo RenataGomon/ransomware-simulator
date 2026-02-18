@@ -1,9 +1,11 @@
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import config
 
 
 def restore_system() -> dict:
-    # simulator/restore.py -> parent is simulator/ -> parent is корінь
     project_root = Path(__file__).resolve().parent.parent
     sandbox = project_root / config.SANDBOX_DIR
 
