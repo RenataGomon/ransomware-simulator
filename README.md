@@ -9,29 +9,6 @@ Original files are NOT modified.
 The program operates only inside the sandbox/ directory.
 A safety marker (.SANDBOX_MARKER) is required.
 
-**Project Structure**
-ransomware-simulator/
-│
-├── main.py
-├── config.py
-│
-├── simulator/
-│   ├── discovery.py
-│   ├── impact_copy.py
-│   ├── note.py
-│   ├── restore.py
-│   └── logger.py
-│
-├── defense/
-│   ├── backup.py
-│   ├── detector.py
-│   └── integrity.py
-│
-├── sandbox/
-│   └── .SANDBOX_MARKER
-│
-└── sandbox_backup/
-
 **How to Run**
 Make sure you are in the project root folder.
 Run simulation
