@@ -11,7 +11,6 @@ class BackupError(RuntimeError):
 
 
 def _project_root() -> Path:
-    # defense/backup.py -> defense -> project root
     return Path(__file__).resolve().parent.parent
 
 
@@ -20,7 +19,6 @@ def _sandbox_dir() -> Path:
 
 
 def _backup_dir() -> Path:
-    # fixed name so user input can't redirect backups somewhere unsafe
     return _project_root() / "sandbox_backup"
 
 
@@ -43,11 +41,7 @@ def _ensure_safe_sandbox() -> Path:
 
 
 def _should_backup(path: Path) -> bool:
-    """
-    Decide if file should be included in backup.
-    - only allowed extensions
-    - skip artifacts: *.locked, note/log/marker
-    """
+
     name = path.name
 
     if name == config.MARKER_NAME:
@@ -59,16 +53,11 @@ def _should_backup(path: Path) -> bool:
     if name.endswith(config.LOCKED_SUFFIX):
         return False
 
-    # Only allowed extensions
     return path.suffix.lower() in {ext.lower() for ext in config.ALLOWED_EXT}
 
 
 def backup_files() -> List[str]:
-    """
-    Creates/updates a backup copy of sandbox files into sandbox_backup/.
 
-    Returns a list of backed up file paths relative to sandbox.
-    """
     sandbox = _ensure_safe_sandbox()
     backup_root = _backup_dir()
     backup_root.mkdir(parents=True, exist_ok=True)
@@ -81,7 +70,6 @@ def backup_files() -> List[str]:
         if not src.is_file():
             continue
 
-        # Ensure inside sandbox
         try:
             rel = src.relative_to(sandbox)
         except ValueError:
@@ -90,7 +78,6 @@ def backup_files() -> List[str]:
         if not _should_backup(src):
             continue
 
-        # size limit
         try:
             if src.stat().st_size > max_bytes:
                 continue
@@ -100,7 +87,6 @@ def backup_files() -> List[str]:
         dst = backup_root / rel
         dst.parent.mkdir(parents=True, exist_ok=True)
 
-        # copy2 keeps timestamps/metadata (nice for demos)
         shutil.copy2(src, dst)
         backed_up.append(rel.as_posix())
 
@@ -108,14 +94,7 @@ def backup_files() -> List[str]:
 
 
 def restore_from_backup(overwrite: bool = True) -> Tuple[int, int]:
-    """
-    Restores files from sandbox_backup/ back into sandbox/.
 
-    - overwrite=True: replace existing files
-    - overwrite=False: only restore missing files
-
-    Returns (restored_count, skipped_count)
-    """
     sandbox = _ensure_safe_sandbox()
     backup_root = _backup_dir()
 
@@ -132,7 +111,6 @@ def restore_from_backup(overwrite: bool = True) -> Tuple[int, int]:
         rel = src.relative_to(backup_root)
         dst = sandbox / rel
 
-        # Never overwrite marker by accident
         if dst.name == config.MARKER_NAME:
             skipped += 1
             continue
